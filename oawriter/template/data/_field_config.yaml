@@ -1,0 +1,32 @@
+################################################################################
+#
+# oawriter field template
+#
+# This file is used to specify which fields should be included in the
+# amendments file for an OpenAPI Specification definition.
+#
+################################################################################
+
+paths:
+  "*":
+    - __keys__:
+        - get
+        - put
+        - delete
+        - options
+        - head
+        - patch
+        - trace
+      __include__:
+        - summary
+        - description
+        - tags
+    - post:
+        - description
+        - tags
+components:
+  schemas:
+    "*":
+      properties:
+        "*":
+          - title
