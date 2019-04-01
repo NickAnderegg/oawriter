@@ -21,6 +21,10 @@ def generate_unified_spec(args):
         print(f"Create a master file at {master_spec_file.name} to run this command")
         exit()
 
+    field_template_file = Path(args.template_file).resolve()
+    with field_template_file.open("r") as f:
+        overwrites_config = yaml.load(f)["overwrites_config"]
+
     master_spec = OASpecParser(str(master_spec_file)).parse_spec(gentle_validation=True)
 
     for spec_file in merged_dir.iterdir():
@@ -28,7 +32,7 @@ def generate_unified_spec(args):
             continue
 
         other_spec = OASpecParser(str(spec_file)).parse_spec()
-        master_spec._update(other_spec, no_override=True)
+        master_spec._update(other_spec, no_override=True, overwrites_config=overwrites_config)
 
     output_file = Path(args.output_name).resolve()
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -55,6 +59,15 @@ def make_merge_parser(parent_parser, common_parser):
         dest="master_spec",
         default="master.yaml",
         help="master spec (default: master.yaml)",
+    )
+
+    merge_parser.add_argument(
+        "-t",
+        "--template",
+        metavar="FILE",
+        dest="template_file",
+        default="field_config.yaml",
+        help="location of field config file (default: field_config.yaml)"
     )
 
     merge_parser.add_argument(

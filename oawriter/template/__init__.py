@@ -141,7 +141,7 @@ def generate_from_template(args):
 
     field_template_file = Path(args.template_file).resolve()
     with field_template_file.open("r") as f:
-        field_template = yaml.load(f)
+        field_template = yaml.load(f)["fields"]
 
     for spec_file in specs_dir.iterdir():
         if "-amendments" in spec_file.stem:
