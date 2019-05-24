@@ -27,7 +27,7 @@ def generate_unified_spec(args):
 
     master_spec = OASpecParser(str(master_spec_file)).parse_spec(gentle_validation=True)
 
-    for spec_file in merged_dir.iterdir():
+    for spec_file in sorted(merged_dir.iterdir()):
         if spec_file.suffix != ".yaml":
             continue
 
